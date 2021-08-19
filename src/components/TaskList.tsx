@@ -1,14 +1,21 @@
 import React from "react";
-import { ITaskList, ITask } from "../interface/interfaces";
+import { ITask } from "../interface/interfaces";
 import TaskItem from "./TaskItem";
 
-const TaskList = ({ taskList }: ITaskList) => {
+interface Props {
+    taskList:ITask[],
+    toggleTodo(id:number): void
+}
+
+const TaskList: React.FC<Props> = ({ taskList, toggleTodo }): JSX.Element => {
+
+    // const {taskList, toggleTodo} = props;
     return (
-        <ul className="list-group mt-5">
+        <div className="mt-5 mb-5 row justify-content-around">
             {taskList.map((task: ITask) => (
-                <TaskItem key={task.id} task={task} />
+                <TaskItem key={task.id} task={task} toggleTodo={toggleTodo}/>
             ))}
-        </ul>
+        </div>
     );
 };
 

@@ -2,42 +2,61 @@ import React, { useState } from "react";
 import TaskList from "./TaskList";
 import { ITask } from "../interface/interfaces";
 
-type FromElement = React.FormEvent<HTMLFormElement>;
+type FormElement = React.FormEvent<HTMLFormElement>;
+
 
 const TaskManager = (): JSX.Element => {
-    const [task, setTask] = useState<string>("");
+    const [taskName, setTask] = useState<string>("");
     const [taskList, setTaskList] = useState<ITask[]>([]);
+    const [classListInput, setClassListInput] = useState<string>('');
 
-    const handleSubmit = (e: FromElement) => {
+    const handleSubmit = (e: FormElement):void => {
         e.preventDefault();
-        console.log(task);
 
-        addTask(task, taskList);
-        setTask("");
-
-        function addTask(name: string, list: ITask[]): void {
-            const newTask: ITask = { id: Date.now(), name, done: false };
-            setTaskList([...list, newTask]);
+        if (taskName.trim() === ''){
+            setClassListInput('form-control-green animate__animated animate__shakeX');
+            setTimeout(() => {
+                setClassListInput('');
+            }, 750);
+            return;
         }
+
+        const newTask:ITask = { id: Date.now(), name: taskName, done: false };
+        setTaskList([...taskList, newTask]);
+        setTask("");
     };
+
+
+    const toggleTodo = (id:number):void => {
+        console.log(id);
+        const newTasks = [...taskList];
+        const task = newTasks.find((todo:ITask):boolean => todo.id === id );
+        if( task !== undefined ){
+            task.done = !task.done;
+            setTaskList(newTasks);
+        }
+    }
 
     return (
         <div className="container mt-5">
-                <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="text-center row justify-content-center">
+                <div className="col-md-7">
                     <div className="form-group">
                         <input
-                            className="form-control"
+                            placeholder="Type something and press Enter"
+                            className={`form-control ${classListInput}`}
                             type="text"
-                            value={task}
+                            value={taskName}
                             onChange={(e) => setTask(e.target.value)}
                             autoFocus
                         />
                     </div>
                     <button className="btn btn-primary mt-3">Save task</button>
-                </form>
+                </div>
+            </form>
 
-                <TaskList taskList={taskList} />
-            </div>
+            <TaskList taskList={taskList} toggleTodo={toggleTodo}/>
+        </div>
     );
 };
 

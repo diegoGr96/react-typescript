@@ -5,13 +5,4 @@ export interface ITask {
 };
 
 
-export interface ITaskList {
-    taskList: ITask[]
-}
-
-export interface ITaskItem{
-    task: ITask
-}
-
-
 
