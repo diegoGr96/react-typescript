@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TaskList from "./TaskList";
 import { ITask } from "../interface/interfaces";
 
 type FormElement = React.FormEvent<HTMLFormElement>;
+const KEY:string = 'tasks';
 
 
 const TaskManager = (): JSX.Element => {
+
+    
     const [taskName, setTask] = useState<string>("");
     const [taskList, setTaskList] = useState<ITask[]>([]);
     const [classListInput, setClassListInput] = useState<string>('');
@@ -23,15 +26,26 @@ const TaskManager = (): JSX.Element => {
 
         const newTask:ITask = { id: Date.now(), name: taskName, done: false };
         setTaskList([...taskList, newTask]);
+
         setTask("");
     };
+    
+    useEffect(():void => {
+        const storageTasks = localStorage.getItem(KEY);
+        if(storageTasks){
+            setTaskList(JSON.parse(storageTasks));
+        }
+    }, [])
+
+    useEffect(():void => {
+        localStorage.setItem(KEY, JSON.stringify(taskList));
+    }, [taskList])
 
 
     const toggleTodo = (id:number):void => {
-        console.log(id);
         const newTasks = [...taskList];
         const task = newTasks.find((todo:ITask):boolean => todo.id === id );
-        if( task !== undefined ){
+        if(task){
             task.done = !task.done;
             setTaskList(newTasks);
         }

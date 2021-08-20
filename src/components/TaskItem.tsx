@@ -2,12 +2,12 @@ import { useState } from "react";
 import useRandomAnimation from "../hooks/useRandomAnimation";
 import { ITask } from "../interface/interfaces";
 
-interface Props {
+type TaskItemProps = {
     task:ITask,
     toggleTodo(id: number): void
 }
 
-const TaskItem: React.FC<Props> = ({ task, toggleTodo }) => {
+const TaskItem = ({ task, toggleTodo }:TaskItemProps) => {
     const { id, name, done } = task;
 
 

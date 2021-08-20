@@ -2,12 +2,12 @@ import React from "react";
 import { ITask } from "../interface/interfaces";
 import TaskItem from "./TaskItem";
 
-interface Props {
+type TaskListProps = {
     taskList:ITask[],
     toggleTodo(id:number): void
 }
 
-const TaskList: React.FC<Props> = ({ taskList, toggleTodo }): JSX.Element => {
+const TaskList = ({ taskList, toggleTodo }: TaskListProps): JSX.Element => {
 
     // const {taskList, toggleTodo} = props;
     return (
